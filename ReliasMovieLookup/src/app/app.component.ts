@@ -21,6 +21,10 @@ import { TmbdService } from './tmdb.service';
 
 export class AppComponent implements OnInit {
   private title = 'Flick Finder';
+
+  /*uses an observable, letting me cancel search requests.
+  Useful because this will search as the user types, so search terms 
+  will change very rapidly. */
   private movies: Observable<Movie[]>;
    /*There's still a window of time after ngOnInit
      that promise of guest id is unfulfilled and
@@ -32,7 +36,6 @@ export class AppComponent implements OnInit {
      For now, I'm going to have the search function just not do anything
      unless the id is ready*/
 
-  private guestID: string;
   private searchTerms = new Subject<string>();
 
 
@@ -41,23 +44,22 @@ export class AppComponent implements OnInit {
   
   //get guest session id on load            
   ngOnInit(): void{
-    this.tmdb.getGuestId()
-      .then((result=>this.guestID=result))
-      .catch(error=>Promise.reject(error));
+    //fetch guest session id
+
 
     this.movies=this.searchTerms
-    .debounceTime(300)
-    .distinctUntilChanged()
-    .switchMap(term => term
-      ? this.tmdb.search(term)
-      : Observable.of<Movie[]>([]))
+    .debounceTime(200) //wait when terms change
+    .distinctUntilChanged() //dont resend if terms havent changed
+    .switchMap(term => term //use new observable when terms change
+      ? this.tmdb.search(term) //if term isn't empty, search it
+      : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
       console.log(error);
-      return Observable.of<Movie[]>([]);
+      return Observable.of<Movie[]>([]); //on error, log and return empty observable
     })
   }
 
-  //grab first page of movie results
+  //send new term to searchTerms
   search(term: string): void {
     this.searchTerms.next(term);
   }

@@ -6,5 +6,6 @@
   <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
   <div *ngFor="let movie of movies | async">  
       <h3>{{movie.title}}</h3>
+      <h4> {{movie.overview}}</h4>
   </div>
 </div>
