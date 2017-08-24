@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http }       from '@angular/http';
+import { Http }       from '@angular/http';
 
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 
 import { Movie } from './movie';
 
@@ -20,12 +22,10 @@ export class TmbdService {
         .catch(error=>Promise.reject(error));
     }
 
-    search(term: string): Promise<Movie[]>{
+    search(term: string): Observable<Movie[]>{
         return this.http
         .get(`${this.api}/search/movie?api_key=${this.apiKey}&query=${term}`)
-        .toPromise()
-        .then(response=>response.json().results as Movie[])
-        .catch(error=>Promise.reject(error));
+        .map(response=>response.json().results as Movie[]);
 
     }
 

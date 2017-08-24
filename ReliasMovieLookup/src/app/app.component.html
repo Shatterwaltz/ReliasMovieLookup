@@ -1,13 +1,10 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
     {{title}}
   </h1>
+
   <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
-  <ul>
-    <li *ngFor="let movie of movies">  
+  <div *ngFor="let movie of movies | async">  
       <h3>{{movie.title}}</h3>
-      <h4>{{movie.overview}}</h4>
-    </li>
-  </ul>
+  </div>
 </div>
