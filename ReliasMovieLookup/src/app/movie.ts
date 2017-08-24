@@ -1,7 +1,7 @@
 export class Movie {
-    primaryInfo: string;
+    id: number;
+    vote_average: number;
     title: string;
     cast: string;
-
-
+    overview: string;
 }
