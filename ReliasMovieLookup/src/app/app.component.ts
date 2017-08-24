@@ -26,26 +26,13 @@ export class AppComponent implements OnInit {
   Useful because this will search as the user types, so search terms 
   will change very rapidly. */
   private movies: Observable<Movie[]>;
-   /*There's still a window of time after ngOnInit
-     that promise of guest id is unfulfilled and
-     guestID is null. Is there a good way to handle this
-     or do I just have to check everywhere to make sure
-     it's not null?
-     Do I make guestID a promise instead and throw .then()
-     everywhere?
-     For now, I'm going to have the search function just not do anything
-     unless the id is ready*/
-
   private searchTerms = new Subject<string>();
-
+  private selectedMovie: Movie;
 
   constructor(private http: Http,
               private tmdb: TmbdService){}
-  
-  //get guest session id on load            
+            
   ngOnInit(): void{
-    //fetch guest session id
-
 
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
@@ -63,4 +50,13 @@ export class AppComponent implements OnInit {
   search(term: string): void {
     this.searchTerms.next(term);
   }
+
+  onSelect(movie:Movie): void{
+    if(this.selectedMovie===movie){
+      this.selectedMovie=null;
+    }else{
+      this.selectedMovie=movie;
+    }
+  }
+
 }
