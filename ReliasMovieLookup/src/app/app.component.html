@@ -1,20 +1,21 @@
 <div style="text-align:center">
-  <h1>
-    {{title}}
-  </h1>
+<h1>
+  {{title}}
+</h1>
 
-  Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
-  <div *ngFor="let movie of movies | async" (click)="onSelect(movie)">  
-      <h3>{{movie.title}}</h3>
-      <div *ngIf="movie===selectedMovie">
-        <div *ngIf="!movie.overview">
-          No description available.
-        </div>
-        <div *ngIf="movie.overview">
-          {{movie.overview}}
-        </div>
+Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
+<div class="movies" *ngFor="let movie of movies | async" (click)="onSelect(movie)">  
+    <h3>{{movie.title}}</h3>
+    <div *ngIf="movie===selectedMovie">
+      <div *ngIf="!movie.overview">
+        No description available.
       </div>
-  </div>
-  <div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
-      No movies containing your search terms were found.
-  </div>
+      <div *ngIf="movie.overview">
+        {{movie.overview}}
+      </div>
+    </div>
+</div>
+<div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
+    No movies containing your search terms were found.
+</div>
+</div>
