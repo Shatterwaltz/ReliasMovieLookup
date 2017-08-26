@@ -1,0 +1,26 @@
+.section {
+    border-top: solid;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    padding-top: 10px;
+    width: 50%;
+    max-width: 500px;
+    min-width: 200px;
+  }
+
+.movies .more {
+    color: #8F872D;
+    background: #2E2B2E;
+    max-width: 500px;
+    min-width: 200px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.movies .more:hover {
+    color: #BFB75D;
+    background: #403D40;
+}
