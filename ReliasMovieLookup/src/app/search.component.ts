@@ -13,6 +13,16 @@ import 'rxjs/add/operator/switchMap';
 import { Movie } from './movie';
 import { TmdbService } from './tmdb.service';
 
+class SearchObject{
+  movieName: string;
+  page: number;
+
+  constructor(movie: string, page: number){
+    this.movieName=movie;
+    this.page=page;
+  }
+}
+
 @Component({
     selector: 'movie-search',
     templateUrl: 'search.component.html',
@@ -23,7 +33,7 @@ export class MovieSearchComponent implements OnInit{
   Useful because this will search as the user types, so search terms 
   will change very rapidly. */
   private movies: Observable<Movie[]>;
-  private searchTerms = new Subject<{movieName: string, page: number}>(); //movie name and page number
+  private searchTerms = new Subject<SearchObject>(); //movie name and page number
   private selectedMovie: Movie;
   private page=1;
   private totalPages: Observable<number>;
@@ -60,9 +70,8 @@ export class MovieSearchComponent implements OnInit{
 
   //send new term to searchTerms
   search(term: string, page=1): void {
-    this.searchTerms.next({term, page});
+    this.searchTerms.next(new SearchObject(term, page));
     this.page=page;
-    console.log(page);
   }
 
   onSelect(movie:Movie): void{
