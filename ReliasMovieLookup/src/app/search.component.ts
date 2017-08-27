@@ -23,7 +23,7 @@ export class MovieSearchComponent implements OnInit{
   Useful because this will search as the user types, so search terms 
   will change very rapidly. */
   private movies: Observable<Movie[]>;
-  private searchTerms = new Subject<string>();
+  private searchTerms = new Subject<{movieName: string, page: number}>(); //movie name and page number
   private selectedMovie: Movie;
   private page=1;
   private totalPages: Observable<number>;
@@ -31,13 +31,14 @@ export class MovieSearchComponent implements OnInit{
   constructor(private tmdb: TmdbService){}
             
   //TODO: figure out how to trigger new search on change of this.page
+  //am tryin to change searchterms to an object of terms and page number
   ngOnInit(): void{
     //get updated movie list
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont grab duplicates from terms
     .switchMap(term => term //use new observable when terms change
-      ? this.tmdb.search(term, this.page) //if term isn't empty, search it
+      ? this.tmdb.search(term.movieName, term.page) //if term isn't empty, search it
       : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
       console.log(error);
@@ -49,7 +50,7 @@ export class MovieSearchComponent implements OnInit{
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont grab duplicates from terms
     .switchMap(term => term //use new observable when terms change
-      ? this.tmdb.getPageCount(term) //if term isn't empty, search it
+      ? this.tmdb.getPageCount(term.movieName) //if term isn't empty, search it
       : Observable.of<number>()) //otherwise, return an empty observable
     .catch(error=>{
       console.log(error);
@@ -59,7 +60,7 @@ export class MovieSearchComponent implements OnInit{
 
   //send new term to searchTerms
   search(term: string, page=1): void {
-    this.searchTerms.next(term);
+    this.searchTerms.next({term, page});
     this.page=page;
     console.log(page);
   }
