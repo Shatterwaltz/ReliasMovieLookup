@@ -3,7 +3,7 @@
         <h2>
             <i>{{movie.title}}</i> details
         </h2>
-        <div class='section'>
+        <div class='infoSection'>
             <div *ngIf="!movie.overview">
                 No description available.
             </div>
@@ -12,7 +12,7 @@
             </div>
         </div>
         <p>
-        <div class='section'>
+        <div class='infoSection'>
             <div *ngIf="movie.vote_count===0">
                 No viewers have rated this movie yet.
             </div>
@@ -29,6 +29,13 @@
             </span>
             <span *ngIf="movie.genres.length===0">Unknown</span>
             </i>
+        </div>
+        <div class='backSection'>
+            <a [routerLink]="['/search']" >
+                <div class="button"  >
+                   Back
+                </div>
+            </a>
         </div>
     </div>
 </div>

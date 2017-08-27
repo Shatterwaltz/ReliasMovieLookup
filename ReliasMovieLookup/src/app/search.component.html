@@ -9,9 +9,11 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
       <div *ngIf="movie.overview">
         {{movie.overview}}
       </div>
+      <a [routerLink]="['/detail', movie.id]" >
       <div class="more"  >
-        <a [routerLink]="['/detail', movie.id]" >More details...</a>
+        More details...
       </div>
+      </a>
     </div>
 </div>
 <div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
