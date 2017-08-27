@@ -25,11 +25,12 @@ export class MovieSearchComponent implements OnInit{
   private movies: Observable<Movie[]>;
   private searchTerms = new Subject<string>();
   private selectedMovie: Movie;
-
+  private pagesLoaded=0;
+  private totalPages: Observable<number>;
   constructor(private tmdb: TmdbService){}
             
   ngOnInit(): void{
-
+    //get updated movie list
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont resend if terms havent changed
@@ -39,11 +40,23 @@ export class MovieSearchComponent implements OnInit{
     .catch(error=>{
       console.log(error);
       return Observable.of<Movie[]>([]); //on error, log and return empty observable
-    })
+    });
+
+    //get updated page count
+    this.totalPages=this.searchTerms
+    .debounceTime(200) //wait when terms change
+    .distinctUntilChanged() //dont resend if terms havent changed
+    .switchMap(term => term //use new observable when terms change
+      ? this.tmdb.getPageCount(term) //if term isn't empty, search it
+      : Observable.of<number>()) //otherwise, return an empty observable
+    .catch(error=>{
+      console.log(error);
+      return Observable.of<number>(); //on error, log and return empty observable
+    });
   }
 
   //send new term to searchTerms
-  search(term: string): void {
+  search(term: string, page=1): void {
     this.searchTerms.next(term);
   }
 
