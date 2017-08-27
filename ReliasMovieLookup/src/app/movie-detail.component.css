@@ -10,7 +10,7 @@
     min-width: 200px;
   }
 
-.backSection{
+.buttonSection{
     border-top: solid;
     border-radius: 5px;
     margin-left: auto;
@@ -23,6 +23,7 @@
 }
 
 .button {
+    cursor: pointer;
     color: #8F872D;
     background: #2E2B2E;
     max-width: 500px;

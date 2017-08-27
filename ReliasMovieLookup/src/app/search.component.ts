@@ -25,17 +25,19 @@ export class MovieSearchComponent implements OnInit{
   private movies: Observable<Movie[]>;
   private searchTerms = new Subject<string>();
   private selectedMovie: Movie;
-  private pagesLoaded=0;
+  private page=1;
   private totalPages: Observable<number>;
+  
   constructor(private tmdb: TmdbService){}
             
+  //TODO: figure out how to trigger new search on change of this.page
   ngOnInit(): void{
     //get updated movie list
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
-    .distinctUntilChanged() //dont resend if terms havent changed
+    .distinctUntilChanged() //dont grab duplicates from terms
     .switchMap(term => term //use new observable when terms change
-      ? this.tmdb.search(term) //if term isn't empty, search it
+      ? this.tmdb.search(term, this.page) //if term isn't empty, search it
       : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
       console.log(error);
@@ -45,7 +47,7 @@ export class MovieSearchComponent implements OnInit{
     //get updated page count
     this.totalPages=this.searchTerms
     .debounceTime(200) //wait when terms change
-    .distinctUntilChanged() //dont resend if terms havent changed
+    .distinctUntilChanged() //dont grab duplicates from terms
     .switchMap(term => term //use new observable when terms change
       ? this.tmdb.getPageCount(term) //if term isn't empty, search it
       : Observable.of<number>()) //otherwise, return an empty observable
@@ -58,6 +60,8 @@ export class MovieSearchComponent implements OnInit{
   //send new term to searchTerms
   search(term: string, page=1): void {
     this.searchTerms.next(term);
+    this.page=page;
+    console.log(page);
   }
 
   onSelect(movie:Movie): void{

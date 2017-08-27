@@ -10,7 +10,7 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
         {{movie.overview}}
       </div>
       <a [routerLink]="['/detail', movie.id]" >
-      <div class="more"  >
+      <div class="button"  >
         More details...
       </div>
       </a>
@@ -18,4 +18,9 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
 </div>
 <div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
     No movies containing your search terms were found.
+</div>
+<div *ngIf="page < (totalPages | async)" class="buttonSection">
+  <div class="button" (click)="search(searchBox.value, (page+1))" >
+        Load more results
+  </div>
 </div>
