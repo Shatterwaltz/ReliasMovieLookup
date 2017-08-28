@@ -13,6 +13,16 @@ import 'rxjs/add/operator/switchMap';
 import { Movie } from './movie';
 import { TmdbService } from './tmdb.service';
 
+class SearchObject{ //Hold required info to fetch results from api
+  movieName: string;
+  page: number;
+
+  constructor(movie: string, page: number){
+    this.movieName=movie;
+    this.page=page;
+  }
+}
+
 @Component({
     selector: 'movie-search',
     templateUrl: 'search.component.html',
@@ -23,28 +33,43 @@ export class MovieSearchComponent implements OnInit{
   Useful because this will search as the user types, so search terms 
   will change very rapidly. */
   private movies: Observable<Movie[]>;
-  private searchTerms = new Subject<string>();
+  private searchTerms = new Subject<SearchObject>(); //movie name and page number
   private selectedMovie: Movie;
-
+  private page=1;
+  private totalPages: Observable<number>;
+  
   constructor(private tmdb: TmdbService){}
             
   ngOnInit(): void{
-
+    //get updated movie list
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
-    .distinctUntilChanged() //dont resend if terms havent changed
-    .switchMap(term => term //use new observable when terms change
-      ? this.tmdb.search(term) //if term isn't empty, search it
+    .distinctUntilChanged() //dont grab duplicates from terms
+    .switchMap(term => term && term.movieName //use new observable when terms change, provided a title was given
+      ? this.tmdb.search(term.movieName, term.page) //if term isn't empty, search it
       : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
       console.log(error);
       return Observable.of<Movie[]>([]); //on error, log and return empty observable
-    })
+    });
+
+    //get updated page count
+    this.totalPages=this.searchTerms
+    .debounceTime(200) //wait when terms change
+    .distinctUntilChanged() //dont grab duplicates from terms
+    .switchMap(term => term && term.movieName //use new observable when terms change
+      ? this.tmdb.getPageCount(term.movieName) //if term isn't empty, search it
+      : Observable.of<number>()) //otherwise, return an empty observable
+    .catch(error=>{
+      console.log(error);
+      return Observable.of<number>(); //on error, log and return empty observable
+    });
   }
 
   //send new term to searchTerms
-  search(term: string): void {
-    this.searchTerms.next(term);
+  search(term: string, page=1): void {
+    this.searchTerms.next(new SearchObject(term, page));
+    this.page=page;
   }
 
   onSelect(movie:Movie): void{

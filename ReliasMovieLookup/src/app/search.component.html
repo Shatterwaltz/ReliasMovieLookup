@@ -10,7 +10,7 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
         {{movie.overview}}
       </div>
       <a [routerLink]="['/detail', movie.id]" >
-      <div class="more"  >
+      <div class="button"  >
         More details...
       </div>
       </a>
@@ -19,3 +19,19 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
 <div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
     No movies containing your search terms were found.
 </div>
+<div *ngIf="searchBox.value!=''" class="buttonSection">
+  <div class="navButton"  *ngIf="page > 1 && searchBox.value!=''"
+    (click)="search(searchBox.value, (page-1))">
+      Previous<br>page
+  </div>
+  Page {{page}}/{{totalPages|async}}
+  <div class="navButton" *ngIf="page < (totalPages | async) && searchBox.value!=''" 
+    (click)="search(searchBox.value, (page+1))" >
+      Next<br>page
+  </div>
+</div>
+<p>
+<a href="http://www.themoviedb.org">
+<img src="https://www.themoviedb.org/assets/static_cache/9b3f9c24d9fd5f297ae433eb33d93514/images/v4/logos/408x161-powered-by-rectangle-green.png" 
+  alt="Powered by TMDB" height="50" width="127"/>
+</a>
