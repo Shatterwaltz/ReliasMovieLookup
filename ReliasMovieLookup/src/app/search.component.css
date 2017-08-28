@@ -32,7 +32,7 @@
     background: #2E2B2E;
     width:30%;
     max-width: 500px;
-    min-width: 90px;
+    min-width: 80px;
     padding-bottom: 5px;
     display: inline-block;
 }
@@ -40,6 +40,11 @@
 .navButton:hover {
     color: #BFB75D;
     background: #403D40;
+}
+
+.navImage {
+    cursor: pointer;
+    display: inline-block;
 }
 
 .buttonSection{

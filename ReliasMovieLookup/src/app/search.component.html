@@ -22,11 +22,16 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
 <div *ngIf="searchBox.value!=''" class="buttonSection">
   <div class="navButton"  *ngIf="page > 1 && searchBox.value!=''"
     (click)="search(searchBox.value, (page-1))">
-      Previous page
+      Previous<br>page
   </div>
-  Page {{page}}
+  Page {{page}}/{{totalPages|async}}
   <div class="navButton" *ngIf="page < (totalPages | async) && searchBox.value!=''" 
     (click)="search(searchBox.value, (page+1))" >
-      Next page
+      Next<br>page
   </div>
 </div>
+<p>
+<a href="http://www.themoviedb.org">
+<img src="https://www.themoviedb.org/assets/static_cache/9b3f9c24d9fd5f297ae433eb33d93514/images/v4/logos/408x161-powered-by-rectangle-green.png" 
+  alt="Powered by TMDB" height="50" width="127"/>
+</a>
