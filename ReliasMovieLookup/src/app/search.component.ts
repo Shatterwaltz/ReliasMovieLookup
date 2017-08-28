@@ -47,7 +47,7 @@ export class MovieSearchComponent implements OnInit{
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont grab duplicates from terms
-    .switchMap(term => term //use new observable when terms change
+    .switchMap(term => term && term.movieName //use new observable when terms change
       ? this.tmdb.search(term.movieName, term.page) //if term isn't empty, search it
       : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
@@ -59,7 +59,7 @@ export class MovieSearchComponent implements OnInit{
     this.totalPages=this.searchTerms
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont grab duplicates from terms
-    .switchMap(term => term //use new observable when terms change
+    .switchMap(term => term && term.movieName //use new observable when terms change
       ? this.tmdb.getPageCount(term.movieName) //if term isn't empty, search it
       : Observable.of<number>()) //otherwise, return an empty observable
     .catch(error=>{
@@ -70,8 +70,10 @@ export class MovieSearchComponent implements OnInit{
 
   //send new term to searchTerms
   search(term: string, page=1): void {
+    
     this.searchTerms.next(new SearchObject(term, page));
     this.page=page;
+  
   }
 
   onSelect(movie:Movie): void{

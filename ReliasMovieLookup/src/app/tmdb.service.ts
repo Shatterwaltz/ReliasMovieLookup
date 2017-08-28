@@ -16,12 +16,20 @@ export class TmdbService {
     search(term: string, page:number=1): Observable<Movie[]>{
         return this.http
         .get(`${this.api}/search/movie?api_key=${this.apiKey}&query=${term}&page=${page}`) //api movie search
-        .map(response=>response.json().results as Movie[]); //return as an array of movie objects
+        .map(response=>response.json().results as Movie[])
+        .catch(error=>{
+      console.log(error);
+      return Observable.of<Movie[]>([]); //on error, log and return empty observable
+    }); 
     }
 
     getPageCount(term: string): Observable<number>{
         return this.http.get(`${this.api}/search/movie?api_key=${this.apiKey}&query=${term}`)
-        .map(response=>response.json().total_pages as number);
+        .map(response=>response.json().total_pages as number)
+        .catch(error=>{
+      console.log(error);
+      return Observable.of<number>(); 
+    });
     }
 
     getMovieDetails(id: number): Promise<Movie>{
