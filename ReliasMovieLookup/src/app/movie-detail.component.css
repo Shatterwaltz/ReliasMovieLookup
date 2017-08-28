@@ -7,7 +7,7 @@
     padding-top: 10px;
     width: 50%;
     max-width: 500px;
-    min-width: 200px;
+    min-width: 300px;
   }
 
 .buttonSection{
@@ -19,7 +19,7 @@
     padding-top: 0px;
     width: 50%;
     max-width: 500px;
-    min-width: 200px;
+    min-width: 300px;
 }
 
 .button {
@@ -27,6 +27,6 @@
     color: #8F872D;
     background: #2E2B2E;
     max-width: 500px;
-    min-width: 200px;
+    min-width: 300px;
     padding-bottom: 5px;
 }

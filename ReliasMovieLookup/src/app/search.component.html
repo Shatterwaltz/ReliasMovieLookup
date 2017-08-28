@@ -20,15 +20,13 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
     No movies containing your search terms were found.
 </div>
 <div *ngIf="searchBox.value!=''" class="buttonSection">
-  <div *ngIf="page > 1 && searchBox.value!=''">
-    <div class="button" (click)="search(searchBox.value, (page-1))" >
-          Previous page
-    </div>
+  <div class="navButton"  *ngIf="page > 1 && searchBox.value!=''"
+    (click)="search(searchBox.value, (page-1))">
+      Previous page
   </div>
   Page {{page}}
-  <div *ngIf="page < (totalPages | async) && searchBox.value!=''">
-    <div class="button" (click)="search(searchBox.value, (page+1))" >
-          Next page
-    </div>
+  <div class="navButton" *ngIf="page < (totalPages | async) && searchBox.value!=''" 
+    (click)="search(searchBox.value, (page+1))" >
+      Next page
   </div>
 </div>
