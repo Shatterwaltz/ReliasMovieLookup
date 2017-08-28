@@ -13,6 +13,8 @@ export class TmdbService {
     api: string = "https://api.themoviedb.org/3"; //beginning of api url
     apiKey: string = "55266cd2b84ba9eb48f1b78ffef5eb42"; //my api key
     
+    //perform search with tmdb's api. If no page specified, grab
+    //first page of results. 
     search(term: string, page:number=1): Observable<Movie[]>{
         return this.http
         .get(`${this.api}/search/movie?api_key=${this.apiKey}&query=${term}&page=${page}`) //api movie search

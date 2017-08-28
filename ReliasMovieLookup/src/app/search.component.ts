@@ -13,7 +13,7 @@ import 'rxjs/add/operator/switchMap';
 import { Movie } from './movie';
 import { TmdbService } from './tmdb.service';
 
-class SearchObject{
+class SearchObject{ //Hold required info to fetch results from api
   movieName: string;
   page: number;
 
@@ -40,14 +40,12 @@ export class MovieSearchComponent implements OnInit{
   
   constructor(private tmdb: TmdbService){}
             
-  //TODO: figure out how to trigger new search on change of this.page
-  //am tryin to change searchterms to an object of terms and page number
   ngOnInit(): void{
     //get updated movie list
     this.movies=this.searchTerms
     .debounceTime(200) //wait when terms change
     .distinctUntilChanged() //dont grab duplicates from terms
-    .switchMap(term => term && term.movieName //use new observable when terms change
+    .switchMap(term => term && term.movieName //use new observable when terms change, provided a title was given
       ? this.tmdb.search(term.movieName, term.page) //if term isn't empty, search it
       : Observable.of<Movie[]>([])) //otherwise, return an empty observable
     .catch(error=>{
@@ -70,10 +68,8 @@ export class MovieSearchComponent implements OnInit{
 
   //send new term to searchTerms
   search(term: string, page=1): void {
-    
     this.searchTerms.next(new SearchObject(term, page));
     this.page=page;
-  
   }
 
   onSelect(movie:Movie): void{

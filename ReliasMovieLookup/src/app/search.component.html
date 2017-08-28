@@ -19,8 +19,16 @@ Search Movie: <input #searchBox id="search-box" (keyup)="search(searchBox.value)
 <div *ngIf="(movies | async)?.length==0 && searchBox.value!=''">
     No movies containing your search terms were found.
 </div>
-<div *ngIf="page < (totalPages | async) && searchBox.value!=''" class="buttonSection">
-  <div class="button" (click)="search(searchBox.value, (page+1))" >
-        Load more results
+<div *ngIf="searchBox.value!=''" class="buttonSection">
+  <div *ngIf="page > 1 && searchBox.value!=''">
+    <div class="button" (click)="search(searchBox.value, (page-1))" >
+          Previous page
+    </div>
+  </div>
+  Page {{page}}
+  <div *ngIf="page < (totalPages | async) && searchBox.value!=''">
+    <div class="button" (click)="search(searchBox.value, (page+1))" >
+          Next page
+    </div>
   </div>
 </div>
